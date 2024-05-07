@@ -1,0 +1,20 @@
+###### Firmware Update Tool
+
+This script allows you to send a FW binary file through Bluetooth Low Energy to an ESP32 MCU. 
+The script makes use of Bleak Client library which is said to work cross platform (Windows, Linux, macOS), but currently 
+it has only been tested and works on Windows 10.
+
+Install dependencies:
+$pip install bleak
+
+For more info on the library, please visit: https://bleak.readthedocs.io/en/latest/index.html
+
+Now you are able to run the script and perform a FW OTA process as follows:
+python FW_UPDATE_BLE.py 'your_binary.bin'
+
+I have attached in FW_IMAGES_TEST folder two binary files only for testing purposes, those applications are only blinking the 
+onboard ESP32 LED (GPIO_NUM_2). Those binary files do not include the BLE code needed to perform a new FW OTA, so once applied you 
+must reflash the board.
+
+In order to perform the BLE update, you can modify UUID_FW_DATA to match your first UUID chars for the ESP32 BLE Characteristic 
+(where you expect to receive FW data), personally I sent first the size of the new binary so in the ESP32 I can compare the expected data size and actual received data. 
