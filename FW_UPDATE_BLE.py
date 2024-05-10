@@ -6,7 +6,7 @@ import hashlib
 from bleak import BleakScanner, BleakClient
 
 client_address = ""
-UUID_FW_SIZE =      "0000ff01"
+UUID_FW_SIZE =      "0000ff01" #Metadata for FW includes FW SHA256
 UUID_FW_VERSION =   "0000ff02"
 UUID_FW_PRJ_NAME =  "0000ff03"
 UUID_FW_DATA =      "0000ff04"
@@ -108,7 +108,11 @@ async def main(fw_file):
                         print_progress_bar(packet*chunk_size, int(fw_binary_size))
                         packet+=1
                         time.sleep(0.095)
-                #print("The SHA256 of " + fw_file + " is " + hasher.hexdigest())
+                
+                fw_hash = hasher.hexdigest()
+                print("The SHA256 of " + fw_file + " is " + fw_hash)
+                await my_client.write_gatt_char(characteristics_dict[UUID_FW_SIZE], fw_hash.encode('ascii'), response=False)
+                break
 
             else:
                 print("\bInvalid choice, please use a valid option")           
